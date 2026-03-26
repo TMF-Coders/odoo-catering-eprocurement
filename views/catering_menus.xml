@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <!-- Root Menu for the entire HORECA Suite -->
-        <menuitem id="menu_vituallas_root" 
-                  name="Vituallas Catering" 
-                  web_icon="catering_eprocurement,static/description/icon.png"
-                  sequence="90"/>
+        <!-- Use the unified root menu from vituallas_core -->
+        <menuitem id="menu_catering_module" 
+                  name="Procurement" 
+                  parent="vituallas_core.menu_vituallas_root" 
+                  sequence="10"/>
                   
-        <!-- Group Procurement inside the suite -->
         <menuitem id="menu_catering_eprocurement" 
                   name="e-Procurement Kiosk" 
-                  parent="menu_vituallas_root" 
+                  parent="menu_catering_module" 
                   action="action_catering_kiosk"
                   sequence="10"/>
                   
-        <!-- Optional: Link the standard purchase view for history -->
         <menuitem id="menu_catering_po_history" 
                   name="Purchase History" 
-                  parent="menu_vituallas_root" 
+                  parent="menu_catering_module" 
                   action="purchase.purchase_rfq"
                   sequence="20"
                   groups="catering_eprocurement.group_catering_chef"/>

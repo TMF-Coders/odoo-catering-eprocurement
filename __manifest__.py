@@ -17,7 +17,7 @@ Features:
     """,
     'author': 'TMFCoders SL',
     'license': 'OPL-1',
-    'depends': ['purchase', 'stock', 'product', 'web'],
+    'depends': ['purchase', 'stock', 'product', 'web', 'vituallas_core'],
     'data': [
         'security/catering_security.xml',
         'views/catering_menus.xml',
