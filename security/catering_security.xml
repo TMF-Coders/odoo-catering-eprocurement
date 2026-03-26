@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="module_category_vituallas_horeca" model="ir.module.category">
+            <field name="name">Vituallas HORECA</field>
+            <field name="description">Suite of modules for Catering and Hospitality.</field>
+            <field name="sequence">21</field>
+        </record>
+
+        <record id="group_catering_chef" model="res.groups">
+            <field name="name">Chef / Kiosk User</field>
+            <field name="category_id" ref="module_category_vituallas_horeca"/>
+            <field name="implied_ids" eval="[(4, ref('purchase.group_purchase_user'))]"/>
+            <field name="comment">Can use the touch Kiosk to order products, but doesn't need full backend access.</field>
+        </record>
+    </data>
+</odoo>

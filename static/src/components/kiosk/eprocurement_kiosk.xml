@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="catering_eprocurement.Kiosk">
+        <div class="o_catering_kiosk_container d-flex flex-column h-100 bg-100">
+            <!-- Header -->
+            <div class="o_kiosk_header d-flex justify-content-between align-items-center p-3 bg-white shadow-sm">
+                <h2 class="m-0 text-primary fw-bold">
+                    <i class="fa fa-shopping-cart me-2"/> Catering Kiosk
+                </h2>
+                <div class="d-flex align-items-center">
+                    <button class="btn btn-outline-primary btn-lg position-relative me-3" t-on-click="toggleCart" t-if="state.step === 'products'">
+                        <i class="fa fa-shopping-basket"/> Cart
+                        <span t-if="cartItemsCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            <t t-esc="cartItemsCount"/>
+                        </span>
+                    </button>
+                    <button class="btn btn-outline-secondary btn-lg" t-on-click="closeKiosk">
+                        <i class="fa fa-times"/> Close
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="o_kiosk_main flex-grow-1 p-4 overflow-auto">
+                <div class="container-fluid">
+                    
+                    <!-- Step 1: Select Supplier -->
+                    <div t-if="state.step === 'supplier'" class="kiosk-step fade-in">
+                        <h3 class="text-center mb-4">Select Supplier</h3>
+                        <div class="row g-4 justify-content-center">
+                            <t t-foreach="state.suppliers" t-as="supplier" t-key="supplier.id">
+                                <div class="col-6 col-md-4 col-lg-3">
+                                    <div class="kiosk-card card h-100 cursor-pointer shadow-sm text-center p-4" t-on-click="() => this.selectSupplier(supplier.id)">
+                                        <img t-if="supplier.image_128" t-attf-src="data:image/png;base64,{{supplier.image_128}}" class="img-fluid mb-3 mx-auto" style="max-height: 80px;"/>
+                                        <i t-else="" class="fa fa-truck fa-3x text-secondary mb-3"/>
+                                        <h4 class="card-title m-0" t-esc="supplier.name"/>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Product Catalog & Cart -->
+                    <div t-if="state.step === 'products'" class="kiosk-step fade-in d-flex gap-4">
+                        <!-- Catalog View -->
+                        <div class="flex-grow-1" t-if="!state.showCart">
+                            <div class="d-flex align-items-center mb-4">
+                                <button class="btn btn-secondary btn-lg me-3" t-on-click="() => this.state.step = 'supplier'"><i class="fa fa-arrow-left"/></button>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text"><i class="fa fa-search"/></span>
+                                    <input type="text" class="form-control" placeholder="Search ingredients..." t-model="state.searchQuery" t-on-keyup="onSearch"/>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-3">
+                                <t t-foreach="filteredProducts" t-as="product" t-key="product.id">
+                                    <div class="col-6 col-md-4 col-xl-3">
+                                        <div class="kiosk-card card h-100 shadow-sm p-3">
+                                            <div class="d-flex flex-column h-100">
+                                                <h5 class="card-title text-truncate" t-att-title="product.name" t-esc="product.name"/>
+                                                <div class="text-muted small mb-2">UoM: <t t-esc="product.uom_id[1]"/></div>
+                                                
+                                                <div class="mt-auto d-flex align-items-center justify-content-between">
+                                                    <!-- Quantity controls -->
+                                                    <div class="input-group" style="width: 140px;">
+                                                        <button class="btn btn-outline-secondary" t-on-click="() => this.updateCart(product, -1)">-</button>
+                                                        <input type="text" class="form-control text-center" readonly="1" t-att-value="getCartQty(product.id)"/>
+                                                        <button class="btn btn-outline-primary" t-on-click="() => this.updateCart(product, 1)">+</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- Cart View Overlay / Panel -->
+                        <div t-if="state.showCart" class="w-100 flex-grow-1">
+                            <div class="d-flex align-items-center mb-4">
+                                <button class="btn btn-secondary btn-lg me-3" t-on-click="toggleCart"><i class="fa fa-arrow-left"/> Back to Catalog</button>
+                                <h3 class="m-0">Your Order</h3>
+                            </div>
+                            
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <table class="table table-hover align-middle mb-0">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Product</th>
+                                                <th class="text-center" style="width: 200px;">Quantity</th>
+                                                <th class="text-end">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr t-foreach="state.cart" t-as="item" t-key="item.product.id">
+                                                <td>
+                                                    <div class="fw-bold" t-esc="item.product.name"/>
+                                                    <small class="text-muted" t-esc="item.product.uom_id[1]"/>
+                                                </td>
+                                                <td>
+                                                    <div class="input-group">
+                                                        <button class="btn btn-outline-secondary" t-on-click="() => this.updateCart(item.product, -1)">-</button>
+                                                        <input type="text" class="form-control text-center" readonly="1" t-att-value="item.qty"/>
+                                                        <button class="btn btn-outline-primary" t-on-click="() => this.updateCart(item.product, 1)">+</button>
+                                                    </div>
+                                                </td>
+                                                <td class="text-end">
+                                                    <button class="btn btn-outline-danger" t-on-click="() => this.removeFromCart(item.product.id)">
+                                                        <i class="fa fa-trash"/>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr t-if="state.cart.length === 0">
+                                                <td colspan="3" class="text-center text-muted py-4">Your cart is empty.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="card-footer bg-light p-4 d-flex justify-content-end">
+                                    <button class="btn btn-success btn-lg px-5 py-3 shadow" t-att-disabled="state.cart.length === 0" t-on-click="submitOrder">
+                                        <i class="fa fa-paper-plane me-2"/> Send Order to Supplier
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Success -->
+                    <div t-if="state.step === 'success'" class="kiosk-step fade-in text-center py-5">
+                        <i class="fa fa-check-circle text-success" style="font-size: 8rem;"/>
+                        <h1 class="mt-4 fw-bold">Order Placed!</h1>
+                        <p class="fs-4 text-muted">Purchase Order <strong t-esc="state.createdPOName"/> has been generated.</p>
+                        <button class="btn btn-primary btn-lg mt-4 px-5 py-3 fs-3 shadow" t-on-click="resetKiosk">
+                            New Order
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

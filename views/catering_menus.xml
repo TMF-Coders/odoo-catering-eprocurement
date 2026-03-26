@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Root Menu for the entire HORECA Suite -->
+        <menuitem id="menu_vituallas_root" 
+                  name="Vituallas Catering" 
+                  web_icon="catering_eprocurement,static/description/icon.png"
+                  sequence="90"/>
+                  
+        <!-- Group Procurement inside the suite -->
+        <menuitem id="menu_catering_eprocurement" 
+                  name="e-Procurement Kiosk" 
+                  parent="menu_vituallas_root" 
+                  action="action_catering_kiosk"
+                  sequence="10"/>
+                  
+        <!-- Optional: Link the standard purchase view for history -->
+        <menuitem id="menu_catering_po_history" 
+                  name="Purchase History" 
+                  parent="menu_vituallas_root" 
+                  action="purchase.purchase_rfq"
+                  sequence="20"
+                  groups="catering_eprocurement.group_catering_chef"/>
+    </data>
+</odoo>

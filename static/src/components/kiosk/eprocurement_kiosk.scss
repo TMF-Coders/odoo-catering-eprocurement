@@ -1,0 +1,38 @@
+.o_catering_kiosk_container {
+    background-color: #f8f9fa;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    
+    .kiosk-step {
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .kiosk-card {
+        transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+        border: none;
+        border-radius: 1rem;
+        
+        &:active {
+            transform: scale(0.98);
+            background-color: #e9ecef;
+        }
+    }
+    
+    .cursor-pointer {
+        cursor: pointer;
+    }
+
+    .input-group {
+        button {
+            width: 40px;
+            font-weight: bold;
+        }
+        input {
+            background-color: white !important;
+        }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+}

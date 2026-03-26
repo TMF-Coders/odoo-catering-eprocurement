@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_catering_kiosk" model="ir.actions.client">
+        <field name="name">Kitchen Ordering Kiosk</field>
+        <field name="tag">catering_eprocurement.kiosk_action</field>
+        <field name="target">fullscreen</field>
+    </record>
+    
+    <!-- Extend Purchase Order tree to show Kiosk flag -->
+    <record id="purchase_order_view_tree_inherit_kiosk" model="ir.ui.view">
+        <field name="name">purchase.order.list.inherit.kiosk</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_kpis_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="is_kiosk_order" optional="show" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
