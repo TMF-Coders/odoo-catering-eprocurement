@@ -2,6 +2,7 @@
     'name': 'Catering e-Procurement Kiosk',
     'version': '19.0.1.0.0',
     'category': 'Inventory/Purchase',
+    'images': ['static/description/main_screenshot.png'],
     'summary': 'Touch-friendly B2B purchasing kiosk for kitchen staff and chefs',
     'description': """
 Vituallas HORECA Suite: Catering e-Procurement
